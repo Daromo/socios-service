@@ -29,6 +29,11 @@ public class SociosController {
 
 	@Autowired ISociosService serviceSocios;
 	
+	@GetMapping("/all")
+	public ResponseEntity<List<SocioEntity>> getAllListSocios(){
+		return new ResponseEntity<>(serviceSocios.getAll(), HttpStatus.OK);
+	}
+	
 	@GetMapping("/activos")
 	public ResponseEntity<List<SocioEntity>> getListaSocios(){
 		List<SocioEntity> listaSocios = serviceSocios.getListaSociosByStatus('A');

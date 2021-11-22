@@ -7,6 +7,7 @@ import com.cfm.socios.jpa.entity.SocioEntity;
 import com.cfm.socios.model.Socio;
 
 public interface ISociosService {
+	List<SocioEntity> getAll();
 	List<SocioEntity> getListaSociosByStatus(char status);
 	SocioEntity buscarSocioByRFC(String rfc) throws BusinessException;
 	SocioEntity guardar(Socio socio, String operacion) throws BusinessException;

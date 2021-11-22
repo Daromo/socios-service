@@ -22,6 +22,11 @@ public class SociosService implements ISociosService {
 	@Autowired ModelMapper modelMapper;
 	
 	@Override
+	public List<SocioEntity> getAll() {
+		return repoSocios.findAll();
+	}
+	
+	@Override
 	public List<SocioEntity> getListaSociosByStatus(char status) {
 		return repoSocios.findByStatus(status);
 	}
