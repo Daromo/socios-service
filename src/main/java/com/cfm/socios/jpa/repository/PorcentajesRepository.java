@@ -9,4 +9,5 @@ import com.cfm.socios.model.PorcentajeId;
 
 public interface PorcentajesRepository extends JpaRepository<PorcentajeEntity, PorcentajeId> {
 	List<PorcentajeEntity> findByIdClave(String clave);
+	List<PorcentajeEntity> findByStatus(Character status);
 }

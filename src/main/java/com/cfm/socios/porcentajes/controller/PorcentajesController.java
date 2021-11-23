@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,4 +42,13 @@ public class PorcentajesController {
 		return new ResponseEntity<>(servicePorcentajes.modificarStatus(clavePorcentaje, 'I'), HttpStatus.OK);
 	}
 	
+	@GetMapping("/")
+	public ResponseEntity<List<PorcentajeEntity>> getListPorcentajes(){
+		return new ResponseEntity<>(servicePorcentajes.getAllPorcentajes(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/activos")
+	public ResponseEntity<List<PorcentajeEntity>> getListPorcentajesActivos(){
+		return new ResponseEntity<>(servicePorcentajes.getPorcentajesActivos(), HttpStatus.OK);
+	}
 }

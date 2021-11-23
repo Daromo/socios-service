@@ -76,4 +76,14 @@ public class PorcentajesService implements IPorcentajesService {
 		listaPorcentajes.forEach(porcentaje -> porcentaje.setStatus(newStatus));
 		return repoPorcentajes.saveAll(listaPorcentajes);
 	}
+
+	@Override
+	public List<PorcentajeEntity> getAllPorcentajes() {
+		return repoPorcentajes.findAll();
+	}
+
+	@Override
+	public List<PorcentajeEntity> getPorcentajesActivos() {
+		return repoPorcentajes.findByStatus('A');
+	}
 }
