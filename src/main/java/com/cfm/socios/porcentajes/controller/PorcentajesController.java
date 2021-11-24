@@ -44,11 +44,12 @@ public class PorcentajesController {
 	
 	@GetMapping("/")
 	public ResponseEntity<List<PorcentajeEntity>> getListPorcentajes(){
-		return new ResponseEntity<>(servicePorcentajes.getAllPorcentajes(), HttpStatus.OK);
+		return new ResponseEntity<>(servicePorcentajes.getNombreSociosPorcentajes(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/activos")
 	public ResponseEntity<List<PorcentajeEntity>> getListPorcentajesActivos(){
 		return new ResponseEntity<>(servicePorcentajes.getPorcentajesActivos(), HttpStatus.OK);
 	}
+	
 }

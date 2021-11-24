@@ -11,4 +11,5 @@ public interface IPorcentajesService {
 	List<PorcentajeEntity> modificarStatus(String clavePorcentaje, char newStatus) throws BusinessException;
 	List<PorcentajeEntity> getAllPorcentajes();
 	List<PorcentajeEntity> getPorcentajesActivos();
+	List<PorcentajeEntity> getNombreSociosPorcentajes();
 }

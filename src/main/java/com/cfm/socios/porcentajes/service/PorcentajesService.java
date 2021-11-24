@@ -3,6 +3,9 @@ package com.cfm.socios.porcentajes.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,10 @@ public class PorcentajesService implements IPorcentajesService {
 
 	@Autowired 
 	PorcentajesRepository repoPorcentajes;
-		
+	
+	@Autowired
+	private EntityManager entityManager;
+	
 	@Override
 	public List<PorcentajeEntity> guardar(List<Porcentaje> porcentajes) throws BusinessException {
 		List<PorcentajeEntity> listaPorcentajes = new ArrayList<>();
@@ -85,5 +91,12 @@ public class PorcentajesService implements IPorcentajesService {
 	@Override
 	public List<PorcentajeEntity> getPorcentajesActivos() {
 		return repoPorcentajes.findByStatus('A');
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PorcentajeEntity> getNombreSociosPorcentajes() {
+		Query query = entityManager.createQuery("SELECT pa.id.clave, CONCAT(s.nombreSocio, ' ', s.apPaternoSocio, ' ',s.apMaternoSocio) as nombre, pa.cantidadPorcentaje, pa.status FROM cat_porcentajes_accionistas pa INNER JOIN tbl_socios s ON s.rfc = pa.id.socioRFC");
+		return query.getResultList();
 	}
 }
