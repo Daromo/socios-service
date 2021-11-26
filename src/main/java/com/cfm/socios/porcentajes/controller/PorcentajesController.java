@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cfm.socios.exception.BusinessException;
 import com.cfm.socios.jpa.entity.PorcentajeEntity;
 import com.cfm.socios.model.Porcentaje;
+import com.cfm.socios.model.PorcentajeSocio;
 import com.cfm.socios.porcentajes.service.IPorcentajesService;
 import com.cfm.socios.util.GUIDGenerator;
 import com.cfm.socios.util.LogHandler;
@@ -43,7 +44,7 @@ public class PorcentajesController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<List<PorcentajeEntity>> getListPorcentajes(){
+	public ResponseEntity<List<PorcentajeSocio>> getListPorcentajes(){
 		return new ResponseEntity<>(servicePorcentajes.getNombreSociosPorcentajes(), HttpStatus.OK);
 	}
 	

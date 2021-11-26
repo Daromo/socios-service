@@ -7,19 +7,19 @@ import javax.persistence.Embeddable;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Getter
 @Setter
+@NoArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class PorcentajeId implements Serializable {
+public class PorcentajeClave implements Serializable {
 	@Column(name = "clave")
 	private String clave;
 	
 	@Column(name = "rfc_socio")
 	private String socioRFC;
-	
-	public PorcentajeId() {}
 }

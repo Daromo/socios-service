@@ -11,7 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import com.cfm.socios.model.PorcentajeId;
+import com.cfm.socios.model.PorcentajeClave;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +19,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "cat_porcentajes_accionistas")
-public class PorcentajeEntity {
+public class PorcentajeEntity {	
 	
+	@NotNull(message = "El argumento PorcentajeClave no puede ser nulo")
 	@EmbeddedId
-	private PorcentajeId id;
+	private PorcentajeClave constraint;
 	
 	@NotNull(message = "El argumento porcentaje no puede ser nulo")
 	@Column(name = "porcentaje")

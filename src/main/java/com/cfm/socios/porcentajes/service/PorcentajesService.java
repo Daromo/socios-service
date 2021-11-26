@@ -2,6 +2,7 @@ package com.cfm.socios.porcentajes.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,6 +16,7 @@ import com.cfm.socios.exception.BusinessException;
 import com.cfm.socios.jpa.entity.PorcentajeEntity;
 import com.cfm.socios.jpa.repository.PorcentajesRepository;
 import com.cfm.socios.model.Porcentaje;
+import com.cfm.socios.model.PorcentajeSocio;
 import com.cfm.socios.util.GUIDGenerator;
 import com.cfm.socios.util.LogHandler;
 import com.cfm.socios.util.Parseador;
@@ -49,8 +51,8 @@ public class PorcentajesService implements IPorcentajesService {
 		modelMapper.addMappings(new PropertyMap<Porcentaje, PorcentajeEntity>() {
 			@Override
 			protected void configure() {
-				map().getId().setClave(source.getClave());
-				map().getId().setSocioRFC(source.getSocioRFC());
+				map().getConstraint().setClave(source.getClave());
+				map().getConstraint().setSocioRFC(source.getSocioRFC());
 			}
 		});
 		return modelMapper.map(porcentaje, PorcentajeEntity.class);
@@ -61,8 +63,8 @@ public class PorcentajesService implements IPorcentajesService {
 	 */
 	public boolean existsPorcentajeInDB(List<PorcentajeEntity> listaPorcentajes) {
 		boolean flag = false;
-		for (PorcentajeEntity item : listaPorcentajes) {
-			if(repoPorcentajes.existsById(item.getId())) {
+		for (PorcentajeEntity porcentaje : listaPorcentajes) {
+			if(repoPorcentajes.existsById(porcentaje.getConstraint())) {
 				flag = true;
 				break;
 			}
@@ -75,7 +77,7 @@ public class PorcentajesService implements IPorcentajesService {
 	 */
 	@Override
 	public List<PorcentajeEntity> modificarStatus(String clavePorcentaje, char newStatus) throws BusinessException{
-		List<PorcentajeEntity> listaPorcentajes = repoPorcentajes.findByIdClave(clavePorcentaje);
+		List<PorcentajeEntity> listaPorcentajes = repoPorcentajes.findByConstraintClave(clavePorcentaje);
 		if(listaPorcentajes.isEmpty())
 			throw new BusinessException("No existe la clave del porcentaje - service");
 			
@@ -95,8 +97,24 @@ public class PorcentajesService implements IPorcentajesService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PorcentajeEntity> getNombreSociosPorcentajes() {
-		Query query = entityManager.createQuery("SELECT pa.id.clave, CONCAT(s.nombreSocio, ' ', s.apPaternoSocio, ' ',s.apMaternoSocio) as nombre, pa.cantidadPorcentaje, pa.status FROM cat_porcentajes_accionistas pa INNER JOIN tbl_socios s ON s.rfc = pa.id.socioRFC");
-		return query.getResultList();
+	public List<PorcentajeSocio> getNombreSociosPorcentajes() {
+		Query query = entityManager.createQuery("SELECT pa.constraint.clave, CONCAT(s.nombreSocio, ' ', s.apPaternoSocio, ' ',s.apMaternoSocio) as nombre, pa.cantidadPorcentaje, pa.status FROM cat_porcentajes_accionistas pa INNER JOIN tbl_socios s ON s.rfc = pa.constraint.socioRFC");
+		List<Object[]> results = query.getResultList();
+		List<PorcentajeSocio> lista;
+		try {
+			lista = results
+					.stream()
+					.map(result -> new PorcentajeSocio(
+							(String) result[0],
+							(String) result[1],
+							(Integer) result[2],
+							(Character) result[3]))
+					.collect(Collectors.toList());
+		}catch (Exception e) {
+			String uid = GUIDGenerator.generateGUID();
+			LogHandler.error(uid, getClass(), "getNombreSocioPorcentajes", e);
+			lista = new ArrayList<>();
+		}
+		return lista;
 	}
 }
