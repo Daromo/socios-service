@@ -13,4 +13,5 @@ public interface IPorcentajesService {
 	List<PorcentajeEntity> getAllPorcentajes();
 	List<PorcentajeEntity> getPorcentajesActivos();
 	List<PorcentajeSocio> getNombreSociosPorcentajes();
+	String getLastClavePorcentaje();
 }

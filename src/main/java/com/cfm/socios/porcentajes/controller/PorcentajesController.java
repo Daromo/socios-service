@@ -53,4 +53,9 @@ public class PorcentajesController {
 		return new ResponseEntity<>(servicePorcentajes.getPorcentajesActivos(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/last")
+	public ResponseEntity<String> getLastRowClave(){
+		return new ResponseEntity<>(servicePorcentajes.getLastClavePorcentaje(), HttpStatus.OK);
+	}
+	
 }

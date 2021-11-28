@@ -14,6 +14,4 @@ public class PorcentajeSocio {
 	private String fullName;
 	private Integer porcentaje;
 	private Character status;
-	
-	
 }

@@ -2,7 +2,6 @@ package com.cfm.socios.porcentajes.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -18,6 +17,7 @@ import com.cfm.socios.jpa.repository.PorcentajesRepository;
 import com.cfm.socios.model.Porcentaje;
 import com.cfm.socios.model.PorcentajeSocio;
 import com.cfm.socios.util.GUIDGenerator;
+import com.cfm.socios.util.ListObjectToListPorcentaje;
 import com.cfm.socios.util.LogHandler;
 import com.cfm.socios.util.Parseador;
 
@@ -84,37 +84,51 @@ public class PorcentajesService implements IPorcentajesService {
 		listaPorcentajes.forEach(porcentaje -> porcentaje.setStatus(newStatus));
 		return repoPorcentajes.saveAll(listaPorcentajes);
 	}
-
+	
+	/*
+	 * OBTENER TODOS LOS PORCENTAJES
+	 */
 	@Override
 	public List<PorcentajeEntity> getAllPorcentajes() {
 		return repoPorcentajes.findAll();
 	}
-
+	
+	/*
+	 * OBTENER SOLO LOS PORCENTAJES ACTIVOS ORDENADOS POR LA CLAVE DEL PORCENTAJE
+	 */
 	@Override
 	public List<PorcentajeEntity> getPorcentajesActivos() {
 		return repoPorcentajes.findByStatus('A');
 	}
-
+	
+	/*
+	 * METODO PARA OBTENER EL NOMBRE COMPLETO DE LOS SOCIOS ORDENADOS POR LA CLAVE DEL PORCENTAJE
+	 * QUERY: INNER JOIN TBL_SOCIOS - CAT_PORCENTAJES_ACCIONISTAS
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PorcentajeSocio> getNombreSociosPorcentajes() {
-		Query query = entityManager.createQuery("SELECT pa.constraint.clave, CONCAT(s.nombreSocio, ' ', s.apPaternoSocio, ' ',s.apMaternoSocio) as nombre, pa.cantidadPorcentaje, pa.status FROM cat_porcentajes_accionistas pa INNER JOIN tbl_socios s ON s.rfc = pa.constraint.socioRFC");
+		Query query = entityManager.createQuery("SELECT pa.constraint.clave, CONCAT(s.nombreSocio, ' ', s.apPaternoSocio, ' ',s.apMaternoSocio) as nombre, pa.cantidadPorcentaje, pa.status FROM cat_porcentajes_accionistas pa INNER JOIN tbl_socios s ON s.rfc = pa.constraint.socioRFC ORDER BY CAST(split_part(pa.constraint.clave,'-',2) as integer) asc");
 		List<Object[]> results = query.getResultList();
-		List<PorcentajeSocio> lista;
-		try {
-			lista = results
-					.stream()
-					.map(result -> new PorcentajeSocio(
-							(String) result[0],
-							(String) result[1],
-							(Integer) result[2],
-							(Character) result[3]))
-					.collect(Collectors.toList());
-		}catch (Exception e) {
-			String uid = GUIDGenerator.generateGUID();
-			LogHandler.error(uid, getClass(), "getNombreSocioPorcentajes", e);
-			lista = new ArrayList<>();
-		}
-		return lista;
+		return ListObjectToListPorcentaje.convertList(results);
 	}
+	
+	/*
+	 * OBTENER LA ULTIMA CLAVE DEL PORCENTAJE 
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public String getLastClavePorcentaje() {
+		String lastClave;
+		try {
+			Query query = entityManager.createQuery("SELECT pa.constraint.clave FROM cat_porcentajes_accionistas pa ORDER BY CAST(split_part(pa.constraint.clave,'-',2) as integer) asc");
+			List<String> results = query.getResultList();
+			return results.get(results.size()-1);
+		}catch (Exception e) {
+			lastClave = "";
+		}
+		return lastClave;
+	}
+	
+	
 }
