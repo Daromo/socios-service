@@ -1,6 +1,8 @@
 package com.cfm.socios.porcentajes.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -54,8 +56,10 @@ public class PorcentajesController {
 	}
 	
 	@GetMapping("/last")
-	public ResponseEntity<String> getLastRowClave(){
-		return new ResponseEntity<>(servicePorcentajes.getLastClavePorcentaje(), HttpStatus.OK);
+	public ResponseEntity<Map<String, String>> getLastRowClave(){
+		Map<String, String> map= new HashMap<>();
+		map.put("clave", servicePorcentajes.getLastClavePorcentaje());
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
 }

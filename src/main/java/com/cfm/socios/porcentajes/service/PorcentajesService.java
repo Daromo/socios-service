@@ -109,7 +109,7 @@ public class PorcentajesService implements IPorcentajesService {
 	@Override
 	public List<PorcentajeSocio> getNombreSociosPorcentajes() {
 		Query query = entityManager.createQuery("SELECT pa.constraint.clave, CONCAT(s.nombreSocio, ' ', s.apPaternoSocio, ' ',s.apMaternoSocio) as nombre, pa.cantidadPorcentaje, pa.status FROM cat_porcentajes_accionistas pa INNER JOIN tbl_socios s ON s.rfc = pa.constraint.socioRFC ORDER BY CAST(split_part(pa.constraint.clave,'-',2) as integer) asc");
-		List<Object[]> results = query.getResultList();
+		List<Object[]> results = query.getResultList();		
 		return ListObjectToListPorcentaje.convertList(results);
 	}
 	

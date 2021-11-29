@@ -11,7 +11,7 @@ public class ListObjectToListPorcentaje {
 	private ListObjectToListPorcentaje() {}
 	
 	public static List<PorcentajeSocio> convertList(List<Object[]> listObjects) {
-		List<PorcentajeSocio> lista;
+		List<PorcentajeSocio> lista = new ArrayList<>();
 		try {
 			lista = listObjects
 					.stream()
@@ -23,8 +23,7 @@ public class ListObjectToListPorcentaje {
 					.collect(Collectors.toList());
 		}catch (Exception e) {
 			String uid = GUIDGenerator.generateGUID();
-			LogHandler.error(uid, ListObjectToListPorcentaje.class, "getNombreSocioPorcentajes", e);
-			lista = new ArrayList<>();
+			LogHandler.error(uid, ListObjectToListPorcentaje.class, "getNombreSocioPorcentajes", e);			
 		}
 		return lista;
 	}
