@@ -9,7 +9,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,19 +17,15 @@ import lombok.Setter;
 @Setter
 @Entity(name = "tbl_socios")
 public class SocioEntity {
-	
 	@Id
 	private String rfc;
 	
-	@NotNull(message = "El argumento nombreSocio no puede ser nulo")
 	@Column(name = "nombre_socio")
 	private String nombreSocio;
 	
-	@NotNull(message = "El argumento apPaternoSocio no puede ser nulo")
 	@Column(name = "ap_paterno_socio")
 	private String apPaternoSocio;
 	
-	@NotNull(message = "El argumento apMaternoSocio no puede ser nulo")
 	@Column(name = "ap_materno_socio")
 	private String apMaternoSocio;
 	

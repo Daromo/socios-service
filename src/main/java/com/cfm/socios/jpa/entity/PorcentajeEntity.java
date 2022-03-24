@@ -9,7 +9,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import com.cfm.socios.model.PorcentajeClave;
 
@@ -20,12 +19,9 @@ import lombok.Setter;
 @Setter
 @Entity(name = "cat_porcentajes_accionistas")
 public class PorcentajeEntity {	
-	
-	@NotNull(message = "El argumento PorcentajeClave no puede ser nulo")
 	@EmbeddedId
 	private PorcentajeClave constraint;
 	
-	@NotNull(message = "El argumento porcentaje no puede ser nulo")
 	@Column(name = "porcentaje")
 	private Integer cantidadPorcentaje;
 	

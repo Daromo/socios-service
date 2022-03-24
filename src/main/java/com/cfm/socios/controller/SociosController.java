@@ -23,17 +23,29 @@ import com.cfm.socios.util.GUIDGenerator;
 import com.cfm.socios.util.LogHandler;
 import com.cfm.socios.util.Parseador;
 
+/**
+ * @author Jose Daniel Rojas Morales
+ * @version 1.0.0
+ */
 @RestController
 @RequestMapping(value = "/socios")
 public class SociosController {
 
 	@Autowired ISociosService serviceSocios;
 	
+	/**
+	 * Endpoint para consultar la lista de todos los socios
+	 * @return List<SocioEntity>
+	 */
 	@GetMapping("/all")
 	public ResponseEntity<List<SocioEntity>> getAllListSocios(){
 		return new ResponseEntity<>(serviceSocios.getAll(), HttpStatus.OK);
 	}
 	
+	/**
+	 * Endpoint para consultar los socios activos
+	 * @return List<SocioEntity>
+	 */
 	@GetMapping("/activos")
 	public ResponseEntity<List<SocioEntity>> getListaSocios(){
 		List<SocioEntity> listaSocios = serviceSocios.getListaSociosByStatus('A');
@@ -42,6 +54,10 @@ public class SociosController {
 		return new ResponseEntity<>(listaSocios, HttpStatus.OK);
 	}
 	
+	/**
+	 * Endpoint para consultar los socios inactivos
+	 * @return List<SocioEntity>
+	 */
 	@GetMapping("/inactivos")
 	public ResponseEntity<List<SocioEntity>> getListaSociosInactivos(){
 		List<SocioEntity> listaSocios = serviceSocios.getListaSociosByStatus('I');
@@ -50,6 +66,11 @@ public class SociosController {
 		return new ResponseEntity<>(listaSocios, HttpStatus.OK);
 	}
 	
+	/**
+	 * Endpoint para guardar el registro de un socio
+	 * @param Cliente
+	 * @return Cliente
+	 */
 	@PostMapping("/nuevo")
 	public ResponseEntity<SocioEntity> agregarSocio(@Valid @RequestBody Socio socio) throws BusinessException{
 		String uid = GUIDGenerator.generateGUID();
@@ -57,6 +78,11 @@ public class SociosController {
 		return new ResponseEntity<>(serviceSocios.guardar(socio, "guardar"), HttpStatus.OK);
 	}
 	
+	/**
+	 * Endpoint para modificar el registro de un socio
+	 * @param Cliente
+	 * @return Cliente
+	 */
 	@PutMapping("/modificar")
 	public ResponseEntity<SocioEntity> modificarSocio(@Valid @RequestBody Socio socio) throws BusinessException{
 		String uid = GUIDGenerator.generateGUID();
@@ -64,11 +90,23 @@ public class SociosController {
 		return new ResponseEntity<>(serviceSocios.guardar(socio, "modificar"), HttpStatus.OK);
 	}
 	
+	/**
+	 * Endpoint para dar de baja a un socio en el sistema
+	 * @param Socio RFC
+	 * @return SocioEntity
+	 * @throws BusinessException
+	 */
 	@PutMapping("/baja/{rfc}")
 	public ResponseEntity<SocioEntity> bajaSocio(@PathVariable String rfc) throws BusinessException{
 		return new ResponseEntity<>(serviceSocios.modificarStatus(rfc, 'I'), HttpStatus.OK);
 	}
 	
+	/**
+	 * Endpoint para reactivar a un socio en el sistema
+	 * @param Socio RFC
+	 * @return SocioEntity
+	 * @throws BusinessException
+	 */
 	@PutMapping("/reactivar/{rfc}")
 	public ResponseEntity<SocioEntity> reactivarSocio(@PathVariable String rfc) throws BusinessException{
 		return new ResponseEntity<>(serviceSocios.modificarStatus(rfc, 'A'), HttpStatus.OK);

@@ -10,6 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * @author Jose Daniel Rojas Morales
+ * @version 1.0.0
+ */
+
 @SuppressWarnings("serial")
 @Getter
 @Setter
